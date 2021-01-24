@@ -10,7 +10,7 @@ module.exports = {
     output: {
         filename: '[name].[contenthash].js',
         path: path.resolve(__dirname, './dist'),
-        publicPath: 'http://localhost:9001/'
+        publicPath: '/static/'
     },
     mode: 'production',
     optimization: {
@@ -21,6 +21,11 @@ module.exports = {
     },
     module: {
         rules: [
+            {
+                test: /\.(png|jpg)$/,
+                use: ['file-loader']
+            },
+
             {
                 test: /\.scss$/,
                 use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
@@ -50,19 +55,24 @@ module.exports = {
             ]
         }),
         new HtmlWebpackPlugin({
-            title: 'ms-button',
-            filename: 'ms-button.html',
+            title: 'ms-index',
+            filename: 'ms-index.html',
             template: 'index.html',
             meta: {
-                description: 'ms-button'
+                description: 'ms-index'
             },
             minify: false
         }),
         new ModuleFederationPlugin({
             name: 'MsButtonApp',
-            filename: 'remoteEntry.js', // http://localhost:9001/remoteEntry.js
-            exposes: {
-                './MsButton': './src/components/ms-button/ms-button.js'
+            remotes: {
+                MsButtonApp: 'MsButtonApp@http://localhost:9001/remoteEntry.js'
+            }
+        }),
+        new ModuleFederationPlugin({
+            name: 'MsImageApp',
+            remotes: {
+                MsImageApp: 'MsImageApp@http://localhost:9002/remoteEntry.js'
             }
         })
     ]

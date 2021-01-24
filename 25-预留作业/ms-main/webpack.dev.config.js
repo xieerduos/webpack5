@@ -1,6 +1,4 @@
 const path = require('path');
-const TerserPlugin = require('terser-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const {ModuleFederationPlugin} = require('webpack').container;
@@ -8,22 +6,28 @@ const {ModuleFederationPlugin} = require('webpack').container;
 module.exports = {
     entry: './src/index.js',
     output: {
-        filename: '[name].[contenthash].js',
+        filename: 'bundle.js',
         path: path.resolve(__dirname, './dist'),
-        publicPath: 'http://localhost:9001/'
+        publicPath: ''
     },
-    mode: 'production',
-    optimization: {
-        splitChunks: {
-            chunks: 'all',
-            minSize: 3000
-        }
+    mode: 'development',
+    devServer: {
+        contentBase: path.join(__dirname, './dist'),
+        compress: true,
+        port: 9000,
+        open: true,
+        hot: true
     },
     module: {
         rules: [
             {
+                test: /\.(png|jpg)$/,
+                use: ['file-loader']
+            },
+
+            {
                 test: /\.scss$/,
-                use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
+                use: ['style-loader', 'css-loader', 'sass-loader']
             },
             {
                 test: /\.js$/,
@@ -31,18 +35,13 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['@babel/env'],
-                        plugins: ['@babel/plugin-proposal-class-properties']
+                        presets: ['@babel/env']
                     }
                 }
             }
         ]
     },
     plugins: [
-        new TerserPlugin(),
-        new MiniCssExtractPlugin({
-            filename: '[name].[contenthash].css'
-        }),
         new CleanWebpackPlugin({
             cleanOnceBeforeBuildPatterns: [
                 '**/*',
@@ -50,19 +49,22 @@ module.exports = {
             ]
         }),
         new HtmlWebpackPlugin({
-            title: 'ms-button',
-            filename: 'ms-button.html',
-            template: 'index.html',
+            title: 'ms-index',
+            // filename: "suibianqi/content.html",
             meta: {
-                description: 'ms-button'
-            },
-            minify: false
+                description: 'ms-index'
+            }
         }),
         new ModuleFederationPlugin({
             name: 'MsButtonApp',
-            filename: 'remoteEntry.js', // http://localhost:9001/remoteEntry.js
-            exposes: {
-                './MsButton': './src/components/ms-button/ms-button.js'
+            remotes: {
+                MsButtonApp: 'MsButtonApp@http://localhost:9001/remoteEntry.js'
+            }
+        }),
+        new ModuleFederationPlugin({
+            name: 'MsImageApp',
+            remotes: {
+                MsImageApp: 'MsImageApp@http://localhost:9002/remoteEntry.js'
             }
         })
     ]

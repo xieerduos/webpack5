@@ -1,0 +1,30 @@
+body,
+html,
+ul,
+li {
+    margin: 0;
+    padding: 0;
+}
+ul,
+li {
+    list-style: none;
+}
+.ms-index {
+    .nav-wrap {
+        display: flex;
+        flex-flow: row nowrap;
+        background-color: blue;
+    }
+    .nav-item {
+        cursor: pointer;
+        height: 60px;
+        line-height: 60px;
+        width: 120px;
+        color: #fff;
+        text-align: center;
+    }
+    .nav-item:hover {
+        background-color: #ededed;
+        color: #333;
+    }
+}
