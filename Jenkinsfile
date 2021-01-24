@@ -19,8 +19,11 @@ pipeline {
         stage('ms-button') { 
             steps {
                 sh 'cd ./25-预留作业/ms-button'
+                sh 'ls'
                 sh 'npm install'
+                sh 'ls'
                 sh 'npm run build'
+                sh 'ls'
                 sh 'rm -rf node_modules'
             }
         }
