@@ -1,0 +1,2 @@
+body,html,ul,li{margin:0;padding:0}ul,li{list-style:none}.ms-index .nav-wrap{display:flex;flex-flow:row nowrap;background-color:blue}.ms-index .nav-item{cursor:pointer;height:60px;line-height:60px;width:120px;color:#fff;text-align:center}.ms-index .nav-item:hover{background-color:#ededed;color:#333}
+

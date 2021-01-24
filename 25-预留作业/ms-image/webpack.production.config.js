@@ -10,7 +10,8 @@ module.exports = {
     output: {
         filename: '[name].[contenthash].js',
         path: path.resolve(__dirname, './dist'),
-        publicPath: '/static/'
+        // publicPath: '/static/'
+        publicPath: 'http://localhost:9002/'
     },
     mode: 'production',
     optimization: {
@@ -49,10 +50,7 @@ module.exports = {
             filename: '[name].[contenthash].css'
         }),
         new CleanWebpackPlugin({
-            cleanOnceBeforeBuildPatterns: [
-                '**/*',
-                path.join(process.cwd(), 'build/**/*')
-            ]
+            cleanOnceBeforeBuildPatterns: ['**/*', path.join(process.cwd(), 'build/**/*')]
         }),
         new HtmlWebpackPlugin({
             title: 'ms-image',
